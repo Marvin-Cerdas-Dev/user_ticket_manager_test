@@ -1,0 +1,20 @@
+{
+  "name": "user_ticket_manager_test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm run start"
+  },
+  "author": "Marvin Ruben Cerdas Angul",
+  "email": "marvin.cerdas.dev@gmail.com",
+  "license": "SEE LICENSE IN license.md",
+  "description": "Este código ha sido desarrollado exclusivamente como respuesta a la prueba técnica para el puesto de Desarrollador Junior en Vida Software & Media Int'l.",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
