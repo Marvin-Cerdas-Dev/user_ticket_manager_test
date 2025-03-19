@@ -4,17 +4,21 @@
 
 Para correr los comandos de `npm` en Visual Studio Code es necesario cambiar la política de ejecución de PowerShell.
 
-1. **Busca "PowerShell"** en el menú de inicio, haz clic derecho y selecciona **"Ejecutar como administrador"**.
+1. Busca **"PowerShell"** en el menú de inicio, haz clic derecho y selecciona **"Ejecutar como administrador"**.
 2. Ejecuta el siguiente comando para permitir la ejecución de scripts firmados:
 
-   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```bash
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
 3. Confirma con **Y** si te lo pide.
 4. **Cierra Visual Studio Code** si lo tienes abierto y vuélvelo a abrir.
 
 Para verificar si la política de ejecución de PowerShell fue modificada correctamente, ejecuta:
 
-npm -v
+```bash
+    npm -v
+```
 
 ---
 
@@ -32,9 +36,11 @@ npm -v
 
 4. Una vez completados estos pasos, abre la terminal (`cmd` o `PowerShell`) y ejecuta el siguiente comando para acceder a MongoDB:
 
+```bash
    mongosh
+```
 
-   Debería aparecer la información de la base de datos. Si tienes problemas con este paso, puedes seguir este [video tutorial](https://www.youtube.com/watch?v=gDOKSgqM-bQ) para repetir los pasos.
+Debería aparecer la información de la base de datos. Si tienes problemas con este paso, puedes seguir este [video tutorial](https://www.youtube.com/watch?v=gDOKSgqM-bQ) para repetir los pasos.
 
 ---
 
@@ -42,7 +48,9 @@ npm -v
 
 Para instalar las dependencias del proyecto, ejecuta el siguiente comando:
 
-npm install:all
+```bash
+    npm install:all
+```
 
 ---
 
@@ -50,7 +58,9 @@ npm install:all
 
 Una vez que todas las dependencias estén instaladas, puedes ejecutar el proyecto con el siguiente comando:
 
-npm start
+```bash
+    npm start
+```
 
 ---
 
