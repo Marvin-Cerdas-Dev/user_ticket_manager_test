@@ -17,7 +17,7 @@ class AuthController {
             res.status(201).json({
                 message: 'User registered successfully',
                 user: {
-                    id: user._id,
+                    id: user.id,
                     fullName: user.fullName,
                     email: user.email,
                     role: user.role
@@ -50,25 +50,20 @@ class AuthController {
 
     }
 
-    async logout(req: Request, res: Response): Promise<void> {
-        res.status(200).json({ message: 'Logout successful' });
-    }
-
-    async refreshToken(req: AuthRequest, res: Response): Promise<void> {
+    async logout(req: AuthRequest, res: Response): Promise<void> {
         try {
-            if (!req.user || !req.user.id) {
-                res.status(400).json({ message: 'User ID is required' });
+            const token = req.body.token;
+
+            if (!token) {
+                res.status(400).json({ message: 'No active session' });
                 return;
             }
 
-            //const token = await authService.refreshToken(req.user.id);
+            await authService.logoutUser(token);
 
-            res.status(200).json({
-                message: 'Token refreshed successfully',
-                //token
-            });
+            res.status(200).json({ message: 'Logout successful' });
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+            res.status(500).json({ message: error.message });
         }
     }
 

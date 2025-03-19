@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User, { IUser, IUserResponse } from "../models/user.model";
 import { JWT_SECRET } from "../config/config";
-
+import BlacklistedToken from '../models/token-blacklist.model';
 
 export class AuthService {
   async registerUser(userData: {
@@ -47,7 +47,7 @@ export class AuthService {
         role: user.role,
       };
 
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 
       return {
         user: {
@@ -63,24 +63,24 @@ export class AuthService {
     }
   }
 
-  async refreshToken(userId: string): Promise<string> {
+  async logoutUser(token: string): Promise<void> {
     try {
-      const user = await User.findById(userId);
+      const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-      if (!user) {
-        throw new Error("User not found");
+      if (!decoded || !decoded.exp) {
+        throw new Error('Invalid token');
       }
 
-      const payload = {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      };
+      const expiresAt = new Date(decoded.exp * 1000);
 
-      return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+      await BlacklistedToken.create({
+        token,
+        expires: new Date(decoded.exp * 1000),
+      });
     } catch (error) {
       throw error;
     }
   }
 }
+
 export default new AuthService();

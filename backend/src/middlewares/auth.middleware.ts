@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/config';
+import BlacklistedToken from '../models/token-blacklist.model';
 
 export interface AuthRequest extends Request {
   user?: any;
+  token?: string;
 }
 
-export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
+export const authenticateToken = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -16,11 +18,21 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
   }
 
   try {
+    const blacklistedToken = await BlacklistedToken.findOne({ token });
+    if (blacklistedToken) {
+      res.status(401).json({ message: 'Token has been revoked' });
+      return;
+    }
+
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded;
     next();
-  } catch (error) {
-    res.status(403).json({ message: 'Invalid or expired token' });
+  } catch (error: any) {
+    if (error.name === 'TokenExpiredError') {
+      res.status(401).json({ message: 'Token expired' });
+      return;
+    }
+    res.status(403).json({ message: 'Invalid token' });
     return;
   }
 };
