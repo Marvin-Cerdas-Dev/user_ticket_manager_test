@@ -3,6 +3,11 @@ import authService from '../services/auth.service';
 import { AuthRequest } from '../middlewares/auth.middleware';
 
 class AuthController {
+    /**
+     * Registers a new user.
+     * @param req - Express request object containing user details in the body.
+     * @param res - Express response object.
+     */
     async register(req: Request, res: Response): Promise<void> {
         try {
             const { fullName, email, password, role } = req.body;
@@ -28,6 +33,11 @@ class AuthController {
         }
     }
 
+    /**
+     * Logs in a user.
+     * @param req - Express request object containing email and password in the body.
+     * @param res - Express response object.
+     */
     async login(req: Request, res: Response): Promise<void> {
         try {
             const { email, password } = req.body;
@@ -50,6 +60,11 @@ class AuthController {
 
     }
 
+    /**
+     * Logs out a user.
+     * @param req - Express request object containing the token in the body.
+     * @param res - Express response object.
+     */
     async logout(req: AuthRequest, res: Response): Promise<void> {
         try {
             const token = req.body.token;

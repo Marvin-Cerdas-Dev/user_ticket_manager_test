@@ -3,11 +3,13 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/config';
 import BlacklistedToken from '../models/token-blacklist.model';
 
+// Interface to extend the Request object with user and token properties
 export interface AuthRequest extends Request {
   user?: any;
   token?: string;
 }
 
+// Middleware to authenticate the JWT token
 export const authenticateToken = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -37,6 +39,7 @@ export const authenticateToken = async (req: AuthRequest, res: Response, next: N
   }
 };
 
+// Middleware to check if the user has admin privileges
 export const isAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
   if (req.user && req.user.role === 'admin') {
     next();

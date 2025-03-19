@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
+// Interface representing a user document in MongoDB
 export interface IUser extends Document {
   id: string;
   fullName: string;
@@ -10,6 +11,7 @@ export interface IUser extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
+// Interface representing a user response object
 export interface IUserResponse {
   id: string;
   fullName: string;
@@ -17,6 +19,7 @@ export interface IUserResponse {
   role: string;
 }
 
+// Mongoose schema for the user model
 const userSchema: Schema<IUser> = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -26,6 +29,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   timestamps: true
 });
 
+// Middleware to hash the password before saving the user document
 userSchema.pre<IUser>('save', async function (next) {
   if (!this.isModified('password')) return next();
 
@@ -38,8 +42,10 @@ userSchema.pre<IUser>('save', async function (next) {
   }
 });
 
+// Method to compare a candidate password with the user's hashed password
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+// Export the user model
 export default mongoose.model<IUser>('User', userSchema);

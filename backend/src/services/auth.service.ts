@@ -3,7 +3,13 @@ import User, { IUser, IUserResponse } from "../models/user.model";
 import { JWT_SECRET } from "../config/config";
 import BlacklistedToken from '../models/token-blacklist.model';
 
+// AuthService handles user authentication and authorization
 export class AuthService {
+  /**
+   * Registers a new user.
+   * @param userData - The user data to register.
+   * @returns The registered user.
+   */
   async registerUser(userData: {
     fullName: string;
     email: string;
@@ -24,6 +30,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * Logs in a user.
+   * @param email - The user's email.
+   * @param password - The user's password.
+   * @returns The logged-in user and a JWT token.
+   */
   async loginUser(
     email: string,
     password: string
@@ -47,7 +59,7 @@ export class AuthService {
         role: user.role,
       };
 
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 
       return {
         user: {
@@ -63,6 +75,10 @@ export class AuthService {
     }
   }
 
+  /**
+   * Logs out a user by blacklisting the provided token.
+   * @param token - The JWT token to blacklist.
+   */
   async logoutUser(token: string): Promise<void> {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as any;
