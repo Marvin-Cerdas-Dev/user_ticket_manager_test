@@ -1,4 +1,4 @@
-import express, {Application, Request, Response, NextFunction} from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { PORT, MONGODB_URI } from './config/config';
@@ -14,12 +14,16 @@ const app: Application = express();
 //Middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 //Routes
-app.use('/api/auth', authRoutes);  
+app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/ticket', ticketRoutes);
+
+app.get('/', (req, res) => {
+    res.json({ message: 'Users and Tickets Management System API' });
+});
 
 //Database connection
 mongoose.connect(MONGODB_URI).then(() => {

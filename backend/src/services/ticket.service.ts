@@ -2,7 +2,7 @@ import ticket, { ITicket } from '../models/ticket.model';
 import { Types } from 'mongoose';
 
 class TicketService {
-    async getrAllTickets(): Promise<ITicket[]> {
+    async getAllTickets(): Promise<ITicket[]> {
         try{
             return await ticket.find().populate('assignedUser', '-password');
         } catch (error) {

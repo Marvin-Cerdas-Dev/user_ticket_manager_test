@@ -1,7 +1,7 @@
 import User, { IUser } from '../models/user.model';
 
 class UserService {
-    async getAllaUsers(): Promise<IUser[]> {
+    async getAllUsers(): Promise<IUser[]> {
         try {
             return await User.find().select('-password');
         } catch (error) {

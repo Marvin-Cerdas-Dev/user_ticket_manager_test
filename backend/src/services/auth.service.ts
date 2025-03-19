@@ -1,58 +1,86 @@
-import jwt from 'jsonwebtoken';
-import User, { IUser } from '../models/user.model';
-import { JWT_SECRET, JWT_EXPIRES_IN } from '../config/config';
+import jwt from "jsonwebtoken";
+import User, { IUser, IUserResponse } from "../models/user.model";
+import { JWT_SECRET } from "../config/config";
 
-export class AuthService{
-    async registerUser(userData: { fullName: string; email: string, password: string, role?: string }): Promise<IUser> {
-        try{
-            const existingUser = await User.findOne({ email: userData.email });
 
-            if(existingUser){
-                throw new Error('User with this email already exists');
-            }
+export class AuthService {
+  async registerUser(userData: {
+    fullName: string;
+    email: string;
+    password: string;
+    role?: string;
+  }): Promise<IUser> {
+    try {
+      const existingUser = await User.findOne({ email: userData.email });
 
-            const user = new User(userData);
-            return await user.save();
-        } catch (error) {
-            throw error;
-        }
+      if (existingUser) {
+        throw new Error("User with this email already exists");
+      }
+
+      const user = new User(userData);
+      return await user.save();
+    } catch (error) {
+      throw error;
     }
+  }
 
-    async loginUser(email: string, password: string): Promise<{ user: IUser, token: string }> {
-        try {
-            const user = await User.findOne({ email });
-        
-            if(!user){
-                throw new Error('User not found');
-            }
+  async loginUser(
+    email: string,
+    password: string
+  ): Promise<{ user: IUserResponse; token: string }> {
+    try {
+      const user = await User.findOne({ email });
 
-            const isMatch = await user.comparePassword(password);
+      if (!user) {
+        throw new Error("User not found");
+      }
 
-            if(!isMatch){
-                throw new Error('Invalid credentials');
-            }
+      const isMatch = await user.comparePassword(password);
 
-            const payload = {
-                id: user._id,
-                email: user.email,
-                role: user.role
-            }
+      if (!isMatch) {
+        throw new Error("Invalid credentials");
+      }
 
-            const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-      
+      const payload = {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
       return {
         user: {
-          id: user._id,
+          id: user.id,
           fullName: user.fullName,
           email: user.email,
-          role: user.role
+          role: user.role,
         },
-        token
+        token,
       };
     } catch (error) {
       throw error;
     }
   }
-}
 
+  async refreshToken(userId: string): Promise<string> {
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const payload = {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      };
+
+      return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+    } catch (error) {
+      throw error;
+    }
+  }
+}
 export default new AuthService();
