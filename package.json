@@ -6,15 +6,18 @@
     "install:all": "npm run install:backend && npm run install:frontend",
     "install:backend": "cd backend && npm install",
     "install:frontend": "cd frontend && npm install",
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:backend": "cd backend && npm run dev",
-    "start:frontend": "cd frontend && npm run start"
+    "start": "concurrently \"npm run start:backend\" \"cd frontend && ng serve --port 4200\"",
+    "start:backend": "cd backend && npm run dev"
   },
-  "author": "Marvin Ruben Cerdas Angul",
+  "author": "Marvin Ruben Cerdas Angulo",
   "email": "marvin.cerdas.dev@gmail.com",
   "license": "SEE LICENSE IN license.md",
   "description": "Este código ha sido desarrollado exclusivamente como respuesta a la prueba técnica para el puesto de Desarrollador Junior en Vida Software & Media Int'l.",
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3"
   }
 }
