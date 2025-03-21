@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
             password: ['', Validators.required]
         });
 
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tickets';
     }
 
     get f() { return this.loginForm.controls; }
@@ -55,18 +55,18 @@ export class LoginComponent implements OnInit {
         this.authService.login(this.loginForm.value)
             .pipe(finalize(() => {
                 this.loading = false;
-                console.log('Finalizado proceso de login (éxito o error)');
+                console.log('Finalizado proceso de login (éxito o error)'); // Agregado
             }))
             .subscribe({
                 next: (user) => {
-                    console.log('Login exitoso, redirigiendo a:', this.returnUrl);
+                    console.log('Login exitoso, redirigiendo a:', this.returnUrl); // Agregado
                     setTimeout(() => {
                         this.router.navigate([this.returnUrl]);
                     }, 100);
                 },
                 error: (error) => {
                     console.error('Error en login:', error);
-                    this.error = error.error?.message || 'Credenciales incorrectas';
+                    this.error = error.error?.message || 'Credenciales incorrectas'; // Agregado
                 }
             });
     }

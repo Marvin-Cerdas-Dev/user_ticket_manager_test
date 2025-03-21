@@ -48,6 +48,7 @@ export class AuthService {
     }
 
     isLoggedIn(): boolean {
+        console.log('AuthService: isLoggedIn called');
         const token = this.getToken();
         if (!token) {
             return false;

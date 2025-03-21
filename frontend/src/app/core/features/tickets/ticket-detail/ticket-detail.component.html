@@ -1,0 +1,70 @@
+<div class="container">
+  <div *ngIf="isLoading" class="text-center">
+    <p>Loading ticket details...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="ticket && !isLoading && !error">
+    <h2>Ticket Details</h2>
+
+    <div class="card mb-4">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <h5 class="mb-0">{{ ticket.title }}</h5>
+        <div>
+          <span
+            [ngClass]="{
+              'badge bg-warning': ticket.status === 'open',
+              'badge bg-info': ticket.status === 'in-progress',
+              'badge bg-success': ticket.status === 'resolved',
+              'badge bg-secondary': ticket.status === 'closed'
+            }"
+            >{{ ticket.status }}</span
+          >
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ ticket.description }}</p>
+
+        <hr />
+
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Assigned To:</strong> {{ ticket.assignedTo }}</p>
+            <p>
+              <strong>Created At:</strong>
+              {{ ticket.createdAt | date : "medium" }}
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p>
+              <strong>Assigned To:</strong>
+              {{ ticket.assignedTo || "Unassigned" }}
+            </p>
+            <p>
+              <strong>Updated At:</strong>
+              {{ ticket.updatedAt | date : "medium" }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a [routerLink]="['/tickets']" class="btn btn-secondary me-2"
+          >Back to List</a
+        >
+        <a
+          [routerLink]="['/tickets', ticket.id, 'edit']"
+          class="btn btn-Prioritymary me-2"
+          >Edit</a
+        >
+        <button *ngIf="isAdmin" (click)="deleteTicket()" class="btn btn-danger">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

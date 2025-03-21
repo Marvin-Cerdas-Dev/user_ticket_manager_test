@@ -1,0 +1,120 @@
+<div class="container">
+  <h2>{{ isEditMode ? "Edit Ticket" : "Create New Ticket" }}</h2>
+
+  <div *ngIf="isLoading" class="text-center">
+    <p>Loading ticket data...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            ticketForm.get('title')?.invalid && ticketForm.get('title')?.touched
+        }"
+      />
+      <div
+        *ngIf="
+          ticketForm.get('title')?.invalid && ticketForm.get('title')?.touched
+        "
+        class="invalid-feedback"
+      >
+        <div *ngIf="ticketForm.get('title')?.errors?.['required']">
+          Title is required.
+        </div>
+        <div *ngIf="ticketForm.get('title')?.errors?.['minlength']">
+          Title must be at least 5 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        class="form-control"
+        rows="5"
+        [ngClass]="{
+          'is-invalid':
+            ticketForm.get('description')?.invalid &&
+            ticketForm.get('description')?.touched
+        }"
+      ></textarea>
+      <div
+        *ngIf="
+          ticketForm.get('description')?.invalid &&
+          ticketForm.get('description')?.touched
+        "
+        class="invalid-feedback"
+      >
+        <div *ngIf="ticketForm.get('description')?.errors?.['required']">
+          Description is required.
+        </div>
+        <div *ngIf="ticketForm.get('description')?.errors?.['minlength']">
+          Description must be at least 10 characters.
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="priority" class="form-label">Priority</label>
+        <select id="priority" formControlName="priority" class="form-select">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="critical">Critical</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 mb-3" *ngIf="isEditMode">
+        <label for="status" class="form-label">Status</label>
+        <select id="status" formControlName="status" class="form-select">
+          <option value="open">Open</option>
+          <option value="in-progress">In Progress</option>
+          <option value="resolved">Resolved</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="assignedTo" class="form-label"
+          >Assigned To (Optional)</label
+        >
+        <input
+          type="text"
+          id="assignedTo"
+          formControlName="assignedTo"
+          class="form-control"
+        />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <a [routerLink]="['/tickets']" class="btn btn-secondary me-2">Cancel</a>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="ticketForm.invalid || isSaving"
+      >
+        {{
+          isSaving
+            ? "Saving..."
+            : isEditMode
+            ? "Update Ticket"
+            : "Create Ticket"
+        }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,25 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { JwtInterceptor } from './core/auth/jwt.interceptor';
-import { ErrorInterceptor } from './core/http/error.interceptor';
+import { LoginComponent } from './core/features/auth/login/login.component';
+import { SharedModule } from './core/shared/shared.module';
+
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        LoginComponent
     ],
     imports: [
-        RouterModule,
         BrowserModule,
+        SharedModule.forRoot(),
         AppRoutingModule,
-        HttpClientModule
-    ],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+        HttpClientModule,
+
     ],
     bootstrap: [AppComponent]
 })

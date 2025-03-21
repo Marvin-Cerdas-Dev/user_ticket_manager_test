@@ -2,12 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../shared/models/user.model';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
-    imports: [CommonModule]
+    imports: [
+        CommonModule,
+        HttpClientModule
+    ],
 })
 export class DashboardComponent implements OnInit {
     currentUser: User | null = null;
