@@ -53,7 +53,7 @@ class AuthController {
                 message: 'Login successful',
                 user,
                 token
-            });
+            });// Eliminar
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }

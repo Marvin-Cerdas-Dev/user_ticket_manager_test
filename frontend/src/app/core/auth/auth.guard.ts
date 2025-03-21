@@ -9,7 +9,10 @@ import { AuthService } from './auth.service';
 
 export class AuthGuard {
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
@@ -17,6 +20,7 @@ export class AuthGuard {
             return true;
         }
 
-        return this.router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
+        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+        return false;
     }
 }

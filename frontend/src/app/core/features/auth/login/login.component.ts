@@ -50,14 +50,23 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this.error = '';
 
+        console.log('Iniciando login...');
+
         this.authService.login(this.loginForm.value)
-            .pipe(finalize(() => this.loading = false))
+            .pipe(finalize(() => {
+                this.loading = false;
+                console.log('Finalizado proceso de login (éxito o error)');
+            }))
             .subscribe({
-                next: () => {
-                    this.router.navigate([this.returnUrl]);
+                next: (user) => {
+                    console.log('Login exitoso, redirigiendo a:', this.returnUrl);
+                    setTimeout(() => {
+                        this.router.navigate([this.returnUrl]);
+                    }, 100);
                 },
-                error: error => {
-                    this.error = error.error.message || 'Incorrect credentials';
+                error: (error) => {
+                    console.error('Error en login:', error);
+                    this.error = error.error?.message || 'Credenciales incorrectas';
                 }
             });
     }

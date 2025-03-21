@@ -43,10 +43,8 @@ export class AuthService {
         });
     }
 
-    private clearSession(): void {
-        localStorage.removeItem(this.tokenKey);
-        this.currentUserSubject.next(null);
-        this.router.navigate(['/login']);
+    register(user: { fullName: string; email: string; password: string, role: string }): Observable<any> {
+        return this.http.post(`${this.apiUri}/register`, user);
     }
 
     isLoggedIn(): boolean {
@@ -71,6 +69,12 @@ export class AuthService {
     isAdmin(): boolean {
         const user = this.currentUserSubject.value;
         return user !== null && user.role === 'admin';
+    }
+
+    private clearSession(): void {
+        localStorage.removeItem(this.tokenKey);
+        this.currentUserSubject.next(null);
+        this.router.navigate(['/login']);
     }
 
     private setAuthData(response: LoginResponse): void {
