@@ -1,0 +1,61 @@
+<div class="container">
+  <div *ngIf="loading" class="text-center">
+    <p>Loading user details...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="user && !loading && !error">
+    <h2>User Details</h2>
+
+    <div class="card mb-4">
+      <div
+        class="card-header d-flex justify-content-between align-items-center"
+      >
+        <h1 class="mb-0">{{ user.fullName }}</h1>
+        <div>
+          <h5>
+            <span
+              [ngClass]="{
+                'bg-primary px-3 py-2 fs-6': user.role === 'admin',
+                'bg-secondary px-3 py-2 fs-6': user.role === 'user'
+              }"
+              class="rounded-pill badge"
+            >
+              {{ user.role }}
+            </span>
+          </h5>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p>
+              <strong>Email:</strong>
+              {{ user.email }}
+            </p>
+            <p>
+              <strong>Created At:</strong>
+              {{ user.createdAt | date : "medium" }}
+            </p>
+            <p>
+              <strong>Updated At:</strong>
+              {{ user.updatedAt | date : "medium" }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button (click)="goBack()" class="btn btn-secondary me-2">
+          Back to List
+        </button>
+        <button (click)="navigateToEdit()" class="btn btn-primary me-2">
+          Edit
+        </button>
+        <button (click)="deleteUser()" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

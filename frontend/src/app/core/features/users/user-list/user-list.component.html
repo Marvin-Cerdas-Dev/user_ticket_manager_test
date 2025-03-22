@@ -1,0 +1,72 @@
+<div class="container">
+  <h1>User Management</h1>
+
+  <div *ngIf="isLoading" class="alert alert-info">Loading users...</div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div
+    *ngIf="!isLoading && !error && users.length > 0"
+    class="table-responsive"
+  >
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.fullName }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <h5>
+              <span
+                [ngClass]="{
+                  'bg-primary': user.role === 'admin',
+                  'bg-secondary': user.role === 'user'
+                }"
+                class="rounded-pill badge"
+              >
+                {{ user.role }}
+              </span>
+            </h5>
+          </td>
+          <td>{{ user.createdAt | date : "short" }}</td>
+          <td>
+            <a
+              [routerLink]="['/users', user._id]"
+              class="btn btn-info btn-sm me-1"
+              >View</a
+            >
+            <a
+              [routerLink]="['/users', user._id, 'edit']"
+              class="btn btn-primary btn-sm me-1"
+              >Edit</a
+            >
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              (click)="user._id && deleteUser(user._id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    *ngIf="!isLoading && !error && users.length === 0"
+    class="alert alert-warning"
+  >
+    No users found.
+  </div>
+</div>

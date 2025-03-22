@@ -14,21 +14,27 @@
       <div
         class="card-header d-flex justify-content-between align-items-center"
       >
-        <h5 class="mb-0">{{ ticket.title }}</h5>
+        <h3 class="mb-0">{{ ticket.title }}</h3>
         <div>
-          <span
-            [ngClass]="{
-              'badge bg-warning': ticket.status === 'open',
-              'badge bg-info': ticket.status === 'in-progress',
-              'badge bg-success': ticket.status === 'resolved',
-              'badge bg-secondary': ticket.status === 'closed'
-            }"
-            >{{ ticket.status }}</span
-          >
+          <h5>
+            <span
+              [ngClass]="{
+                'bg-warning': ticket.status === 'open',
+                'bg-info': ticket.status === 'in-progress',
+                'bg-success': ticket.status === 'resolved',
+                'bg-secondary': ticket.status === 'closed'
+              }"
+              class="rounded-pill badge"
+              >{{ ticket.status }}</span
+            >
+          </h5>
         </div>
       </div>
       <div class="card-body">
-        <p class="card-text">{{ ticket.description }}</p>
+        <p class="card-text">
+          <strong>Description:</strong>
+          {{ ticket.description }}
+        </p>
 
         <hr />
 

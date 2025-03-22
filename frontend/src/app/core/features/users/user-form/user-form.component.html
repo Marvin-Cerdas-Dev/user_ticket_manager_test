@@ -1,0 +1,125 @@
+<!-- src/app/admin/users/user-form/user-form.component.html -->
+<div class="container">
+  <h2>{{ isEditing ? "Edit" : "Create" }} User</h2>
+
+  <div *ngIf="isLoading" class="text-center">
+    <p>Loading...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Full Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="fullName"
+        formControlName="fullName"
+        [ngClass]="{
+          'is-invalid':
+            userForm.get('fullName')?.invalid &&
+            userForm.get('fullName')?.touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched
+        "
+      >
+        Full name is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        formControlName="email"
+        [ngClass]="{
+          'is-invalid':
+            userForm.get('email')?.invalid && userForm.get('email')?.touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+      >
+        <span *ngIf="userForm.get('email')?.errors?.['required']"
+          >Email is required.</span
+        >
+        <span *ngIf="userForm.get('email')?.errors?.['email']"
+          >Please enter a valid email.</span
+        >
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">
+        {{ isEditing ? "Password (leave blank to keep current)" : "Password" }}
+      </label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        formControlName="password"
+        [ngClass]="{
+          'is-invalid':
+            userForm.get('password')?.invalid &&
+            userForm.get('password')?.touched
+        }"
+      />
+      <div
+        class="invalid-feedback"
+        *ngIf="
+          userForm.get('password')?.invalid && userForm.get('password')?.touched
+        "
+      >
+        <span *ngIf="userForm.get('password')?.errors?.['required']"
+          >Password is required.</span
+        >
+        <span *ngIf="userForm.get('password')?.errors?.['minlength']"
+          >Password must be at least 6 characters.</span
+        >
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="role" class="form-label">Role</label>
+      <select
+        class="form-select"
+        id="role"
+        formControlName="role"
+        [ngClass]="{
+          'is-invalid':
+            userForm.get('role')?.invalid && userForm.get('role')?.touched
+        }"
+      >
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <div
+        class="invalid-feedback"
+        *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched"
+      >
+        Role is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button
+        type="submit"
+        class="btn btn-primary me-2"
+        [disabled]="userForm.invalid || isLoading"
+      >
+        {{ isEditing ? "Update" : "Create" }}
+      </button>
+      <a routerLink="/admin/users" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>

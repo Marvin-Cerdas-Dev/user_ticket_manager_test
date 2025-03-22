@@ -1,62 +1,60 @@
-// sidebar.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <aside class="bg-gray-100 w-64 min-h-screen p-4 border-r">
-      <div class="mb-6">
-        <h2 class="text-lg font-semibold text-gray-800">Menu</h2>
+    <div class="col-1 m-3 p-3">
+      <div class="btn-group-vertical" role="group" aria-label="Sidebar Menu">
+        <div class="btn-group" role="group">
+          <button id="btnTickets" type="button" class="btn btn-primary dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Tickets
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="btnTickets">
+            <li><a class="dropdown-item" routerLink="/dashboard">Dashboard</a></li>
+            <li><a class="dropdown-item" routerLink="/tickets/create">Create Ticket</a></li>
+          </ul>
+        </div>
+        <div class="btn-group" role="group" *ngIf="isAdmin">
+          <button id="btnUsers" type="button" class="btn btn-primary dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Users
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="btnUsers">
+            <li><a class="dropdown-item" routerLink="/users">Manage Users</a></li>
+          </ul>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="onLogout()">Logout</button>
       </div>
-      <nav>
-        <ul class="space-y-2">
-          <li>
-            <a routerLink="/dashboard" routerLinkActive="bg-gray-200" 
-               class="block p-2 rounded hover:bg-gray-200 transition-colors">
-              <span class="ml-2">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/tickets" routerLinkActive="bg-gray-200"
-               class="block p-2 rounded hover:bg-gray-200 transition-colors">
-              <span class="ml-2">My Tickets</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/tickets/create" routerLinkActive="bg-gray-200"
-               class="block p-2 rounded hover:bg-gray-200 transition-colors">
-              <span class="ml-2">Create Ticket</span>
-            </a>
-          </li>
-          <li *ngIf="isAdmin">
-            <a routerLink="/admin/users" routerLinkActive="bg-gray-200"
-               class="block p-2 rounded hover:bg-gray-200 transition-colors text-blue-600">
-              <span class="ml-2">User Management</span>
-            </a>
-          </li>
-           <li class="mt-8">
-            <button (click)="onLogout()"
-                   class="block w-full p-2 rounded text-left hover:bg-red-100 transition-colors text-red-600">
-              <span class="ml-2">Logout</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    </div>
   `,
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   isAdmin = false;
+  private subscription = new Subscription();
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    // Establecer el valor inicial
     this.isAdmin = this.authService.isAdmin();
+
+    // Suscribirse a cambios
+    this.subscription.add(
+      this.authService.isAdmin$().subscribe(isAdmin => {
+        this.isAdmin = isAdmin;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onLogout(): void {
