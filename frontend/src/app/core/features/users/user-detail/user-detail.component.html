@@ -1,12 +1,15 @@
 <div class="container">
+  <!-- Display loading message while user details are being fetched -->
   <div *ngIf="loading" class="text-center">
     <p>Loading user details...</p>
   </div>
 
+  <!-- Display error message if there is an error -->
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
+  <!-- Display user details if available and no loading or error -->
   <div *ngIf="user && !loading && !error">
     <h2>User Details</h2>
 
@@ -17,6 +20,7 @@
         <h1 class="mb-0">{{ user.fullName }}</h1>
         <div>
           <h5>
+            <!-- Display user role with appropriate badge color -->
             <span
               [ngClass]="{
                 'bg-primary px-3 py-2 fs-6': user.role === 'admin',
@@ -48,12 +52,15 @@
         </div>
       </div>
       <div class="card-footer">
+        <!-- Button to navigate back to the user list -->
         <button (click)="goBack()" class="btn btn-secondary me-2">
           Back to List
         </button>
+        <!-- Button to navigate to the edit user page -->
         <button (click)="navigateToEdit()" class="btn btn-primary me-2">
           Edit
         </button>
+        <!-- Button to delete the user -->
         <button (click)="deleteUser()" class="btn btn-danger">Delete</button>
       </div>
     </div>

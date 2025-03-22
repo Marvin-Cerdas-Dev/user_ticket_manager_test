@@ -1,12 +1,15 @@
 <div class="container">
+  <!-- Display loading message while ticket details are being fetched -->
   <div *ngIf="isLoading" class="text-center">
     <p>Loading ticket details...</p>
   </div>
 
+  <!-- Display error message if there is an error -->
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
+  <!-- Display ticket details if available and no loading or error -->
   <div *ngIf="ticket && !isLoading && !error">
     <h2>Ticket Details</h2>
 
@@ -17,6 +20,7 @@
         <h3 class="mb-0">{{ ticket.title }}</h3>
         <div>
           <h5>
+            <!-- Display ticket status with appropriate badge color -->
             <span
               [ngClass]="{
                 'bg-warning': ticket.status === 'open',
@@ -56,14 +60,17 @@
         </div>
       </div>
       <div class="card-footer">
+        <!-- Button to navigate back to the ticket list -->
         <a [routerLink]="['/tickets']" class="btn btn-secondary me-2"
           >Back to List</a
         >
+        <!-- Button to navigate to the edit ticket page -->
         <a
           [routerLink]="['/tickets', ticket.id, 'edit']"
           class="btn btn-primary me-2"
           >Edit</a
         >
+        <!-- Button to delete the ticket, visible only to admins -->
         <button *ngIf="isAdmin" (click)="deleteTicket()" class="btn btn-danger">
           Delete
         </button>

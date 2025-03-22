@@ -26,3 +26,11 @@ export const TICKETS_ROUTES: Routes = [
         canActivate: [AuthGuard]
     }
 ];
+
+/**
+ * Routes configuration for the tickets feature module.
+ * - '' (root path): Displays the TicketListComponent and requires authentication.
+ * - 'create': Displays the TicketEditComponent for creating a new ticket and requires authentication.
+ * - ':id': Displays the TicketDetailComponent for viewing a specific ticket and requires authentication.
+ * - ':id/edit': Displays the TicketEditComponent for editing a specific ticket and requires authentication.
+ */

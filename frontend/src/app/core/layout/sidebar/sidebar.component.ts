@@ -42,10 +42,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    // Establecer el valor inicial
+    // Set the initial value of isAdmin
     this.isAdmin = this.authService.isAdmin();
 
-    // Suscribirse a cambios
+    // Subscribe to changes in the admin status
     this.subscription.add(
       this.authService.isAdmin$().subscribe(isAdmin => {
         this.isAdmin = isAdmin;
@@ -54,10 +54,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions to prevent memory leaks
     this.subscription.unsubscribe();
   }
 
+  /**
+   * Logs out the current user.
+   */
   onLogout(): void {
     this.authService.logout();
   }
 }
+
+/**
+ * SidebarComponent: This component represents the sidebar menu of the application.
+ * - isAdmin: Indicates whether the user is an admin.
+ * - The template includes navigation links for tickets and user management, and a logout button.
+ * - The onLogout method logs out the current user.
+ */

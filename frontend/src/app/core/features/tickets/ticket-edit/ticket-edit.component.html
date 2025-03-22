@@ -1,14 +1,18 @@
 <div class="container">
+  <!-- Display the header based on the mode (edit or create) -->
   <h2>{{ isEditMode ? "Edit Ticket" : "Create New Ticket" }}</h2>
 
+  <!-- Display loading message while ticket data is being fetched -->
   <div *ngIf="isLoading" class="text-center">
     <p>Loading ticket data...</p>
   </div>
 
+  <!-- Display error message if there is an error -->
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
+  <!-- Ticket form for creating or editing a ticket -->
   <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
     <div class="mb-3">
       <label for="title" class="form-label">Title</label>
@@ -67,6 +71,7 @@
     </div>
 
     <div class="row">
+      <!-- Status dropdown, visible only in edit mode -->
       <div class="col-md-4 mb-3" *ngIf="isEditMode">
         <label for="status" class="form-label">Status</label>
         <select id="status" formControlName="status" class="form-select">
@@ -91,7 +96,9 @@
     </div>
 
     <div class="mb-3">
+      <!-- Button to navigate back to the ticket list -->
       <a [routerLink]="['/tickets']" class="btn btn-secondary me-2">Cancel</a>
+      <!-- Submit button for saving the ticket -->
       <button
         type="submit"
         class="btn btn-primary"

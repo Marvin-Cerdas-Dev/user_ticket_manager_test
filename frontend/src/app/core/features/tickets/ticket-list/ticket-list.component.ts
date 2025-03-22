@@ -25,23 +25,28 @@ export class TicketListComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        // Establecer el valor inicial
+        // Set the initial value of isAdmin
         this.isAdmin = this.authService.isAdmin();
 
-        // Suscribirse a cambios
+        // Subscribe to changes in the admin status
         this.subscription.add(
             this.authService.isAdmin$().subscribe(isAdmin => {
                 this.isAdmin = isAdmin;
             })
         );
 
+        // Load the tickets
         this.loadTickets();
     }
 
     ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions to prevent memory leaks
         this.subscription.unsubscribe();
     }
 
+    /**
+     * Loads the list of tickets from the server.
+     */
     loadTickets(): void {
         this.isLoading = true;
         this.subscription.add(
@@ -53,12 +58,15 @@ export class TicketListComponent implements OnInit, OnDestroy {
                 error: (err) => {
                     this.error = 'Error loading tickets. Please try again.';
                     this.isLoading = false;
-                    console.error('Error loading tickets', err);
                 }
             })
         );
     }
 
+    /**
+     * Deletes a ticket by its ID.
+     * @param id The ID of the ticket to delete.
+     */
     deleteTicket(id: string): void {
         if (confirm('Are you sure you want to delete this ticket?')) {
             this.subscription.add(
@@ -68,7 +76,6 @@ export class TicketListComponent implements OnInit, OnDestroy {
                     },
                     error: (err) => {
                         this.error = 'Error deleting ticket. Please try again.';
-                        console.error('Error deleting ticket', err);
                     }
                 })
             );

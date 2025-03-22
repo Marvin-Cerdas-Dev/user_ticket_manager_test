@@ -37,6 +37,9 @@ export class TicketEditComponent implements OnInit {
         }
     }
 
+    /**
+     * Initializes the ticket form with validation rules.
+     */
     initForm(): void {
         this.ticketForm = this.fb.group({
             title: ['', [Validators.required, Validators.minLength(5)]],
@@ -46,6 +49,10 @@ export class TicketEditComponent implements OnInit {
         });
     }
 
+    /**
+     * Loads the ticket details by ID and populates the form.
+     * @param id The ID of the ticket to load.
+     */
     loadTicket(id: string): void {
         this.isLoading = true;
         this.ticketService.getTicketById(id).subscribe({
@@ -62,11 +69,13 @@ export class TicketEditComponent implements OnInit {
             error: (err) => {
                 this.error = 'Error loading ticket. Please try again.';
                 this.isLoading = false;
-                console.error('Error loading ticket', err);
             }
         });
     }
 
+    /**
+     * Handles the form submission for creating or updating a ticket.
+     */
     onSubmit(): void {
         if (this.ticketForm.invalid) {
             return;
@@ -75,8 +84,6 @@ export class TicketEditComponent implements OnInit {
         this.isSaving = true;
 
         if (this.isEditMode && this.ticketId) {
-
-
             const updateData: TicketUpdateRequest = {
                 title: this.ticketForm.value.title,
                 description: this.ticketForm.value.description,
@@ -91,21 +98,15 @@ export class TicketEditComponent implements OnInit {
                 error: (err) => {
                     this.error = 'Error updating ticket. Please try again.';
                     this.isSaving = false;
-                    console.error('Error updating ticket', err);
                 }
             });
         } else {
-            console.log('SALVANDO EL TICKET...');
-
             const createData: TicketCreateRequest = {
                 title: this.ticketForm.value.title,
                 description: this.ticketForm.value.description,
                 status: 'open',
-                //assignedTo: this.ticketForm.value.assignedTo || undefined
-                assignedTo: "67da92fddaab2dcd91e860a9"
+                assignedTo: this.ticketForm.value.assignedTo || undefined
             };
-
-            console.log('TICKET =>', createData);
 
             this.ticketService.createTicket(createData).subscribe({
                 next: (newTicket) => {
@@ -114,7 +115,6 @@ export class TicketEditComponent implements OnInit {
                 error: (err) => {
                     this.error = 'Error creating ticket. Please try again.';
                     this.isSaving = false;
-                    console.error('Error creating ticket', err);
                 }
             });
         }

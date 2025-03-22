@@ -1,67 +1,70 @@
-# Configuraciones Previas para el Proyecto
+# Management System
 
-## ⚙️ Configuración de la Terminal de Visual Studio Code
+## Pre-Project Configurations ⚙️
 
-Para correr los comandos de `npm` en Visual Studio Code es necesario cambiar la política de ejecución de PowerShell.
+Before running the project, some initial configurations must be completed.
 
-1. Busca **"PowerShell"** en el menú de inicio, haz clic derecho y selecciona **"Ejecutar como administrador"**.
-2. Ejecuta el siguiente comando para permitir la ejecución de scripts firmados:
+### Configuring the Visual Studio Code Terminal 🖥️
 
-```bash
-    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
+To execute `npm` commands in Visual Studio Code, it is necessary to modify the PowerShell execution policy.
 
-3. Confirma con **Y** si te lo pide.
-4. **Cierra Visual Studio Code** si lo tienes abierto y vuélvelo a abrir.
+1. Search for **"PowerShell"** in the Start menu, right-click it, and select **"Run as Administrator"**.
+2. Execute the following command to allow the execution of signed scripts:
 
-Para verificar si la política de ejecución de PowerShell fue modificada correctamente, ejecuta:
+   ```powershell
+   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
 
-```bash
-    npm -v
-```
+3. Confirm by typing **Y** when prompted.
+4. **Close Visual Studio Code** if it's open and restart it.
+5. To verify if the execution policy has been successfully modified, run:
+
+   ```bash
+   npm -v
+   ```
 
 ---
 
-## 🛠️ Instalación de MongoDB de Manera Local
+## 🛠️ Installing MongoDB Locally
 
-1. Dirígete a [MongoDB Community Edition](https://www.mongodb.com/try/download/community-kubernetes-operator) y descarga la versión correspondiente a tu sistema operativo.
-2. Procede con la instalación, asegurándote de seleccionar la opción **"Run service as Network Service user"** en Windows.
+1. Go to [MongoDB Community Edition](https://www.mongodb.com/try/download/community-kubernetes-operator) and download the version appropriate for your operating system.
+2. Proceed with the installation, ensuring that you select the **"Run service as Network Service user"** option on Windows.
 
-   > **Nota**: Asegúrate de seleccionar esta opción para un correcto funcionamiento en tu sistema.
+   > **Note**: Selecting this option ensures proper functionality on your system.
 
-3. Luego, instala un terminal para gestionar MongoDB de forma más sencilla:
+3. Install a terminal to manage MongoDB more efficiently:
 
-   - Visita [MongoDB Shell](https://www.mongodb.com/try/download/shell) y descarga la versión **MSI para Windows**.
-   - Procede con la instalación.
+   - Visit [MongoDB Shell](https://www.mongodb.com/try/download/shell) and download the **MSI version for Windows**.
+   - Complete the installation.
 
-4. Una vez completados estos pasos, abre la terminal (`cmd` o `PowerShell`) y ejecuta el siguiente comando para acceder a MongoDB:
+4. Once these steps are completed, open the `cmd` or `PowerShell` terminal and run:
 
-```bash
+   ```bash
    mongosh
-```
+   ```
 
-Debería aparecer la información de la base de datos. Si tienes problemas con este paso, puedes seguir este [video tutorial](https://www.youtube.com/watch?v=gDOKSgqM-bQ) para repetir los pasos.
+   This should display the database information. If you encounter any issues, refer to [this video tutorial](https://www.youtube.com/watch?v=gDOKSgqM-bQ) for assistance.
 
 ---
 
-## 📦 Instalación de Dependencias
+## 📦 Installing Dependencies
 
-Para instalar las dependencias del proyecto, ejecuta el siguiente comando:
+To install all project dependencies, execute the following command:
 
 ```bash
-    npm install:all
+npm run install:all
 ```
 
 ---
 
-## 🚀 Ejecutar el Proyecto
+## 🚀 Running the Project
 
-Una vez que todas las dependencias estén instaladas, puedes ejecutar el proyecto con el siguiente comando:
+Once all dependencies are installed, the project can be started with:
 
 ```bash
-    npm start
+npm start
 ```
 
 ---
 
-¡Listo! Ahora deberías poder trabajar con el proyecto sin problemas. Si tienes alguna duda, no dudes en preguntar. 😊
+That's it! You should now be able to work with the project without any issues. If you have any questions, feel free to ask. 😊

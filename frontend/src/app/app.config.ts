@@ -11,3 +11,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes)
   ]
 };
+
+/**
+ * appConfig: This configuration object provides the application-wide providers.
+ * - provideZoneChangeDetection: Configures zone change detection with event coalescing.
+ * - provideHttpClient: Configures the HTTP client with interceptors.
+ * - provideRouter: Configures the router with the application's routes.
+ */

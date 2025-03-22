@@ -31,41 +31,53 @@ export class UserDetailComponent implements OnInit {
         }
     }
 
+    /**
+     * Fetches the user details by ID.
+     * @param userId The ID of the user to fetch.
+     */
     fetchUserDetails(userId: string): void {
         this.userService.getUserById(userId).subscribe({
             next: (user) => {
                 this.user = user;
                 this.loading = false;
             },
-            error: (err) => {
-                console.error('Error fetching user details:', err);
+            error: () => {
                 this.error = true;
                 this.loading = false;
             }
         });
     }
 
+    /**
+     * Navigates to the edit user page.
+     */
     navigateToEdit(): void {
         if (this.user?._id) {
             this.router.navigate(['/users', this.user._id, 'edit']);
         }
     }
 
+    /**
+     * Deletes the current user.
+     */
     deleteUser(): void {
         if (!this.user?._id) return;
 
-        if (confirm('¿Estás seguro que deseas eliminar este usuario?')) {
+        if (confirm('Are you sure you want to delete this user?')) {
             this.userService.deleteUser(this.user._id).subscribe({
                 next: () => {
                     this.router.navigate(['/users']);
                 },
-                error: (err) => {
-                    console.error('Error deleting user:', err);
+                error: () => {
+                    this.error = true;
                 }
             });
         }
     }
 
+    /**
+     * Navigates back to the user list.
+     */
     goBack(): void {
         this.router.navigate(['/users']);
     }

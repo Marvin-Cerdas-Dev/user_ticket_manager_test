@@ -28,21 +28,29 @@ export class LoginComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        // Redirect to the return URL if the user is already logged in
         if (this.authService.isLoggedIn()) {
-            this.authService.isLoggedIn() && this.router.navigateByUrl(this.returnUrl);
+            this.router.navigateByUrl(this.returnUrl);
         }
 
+        // Initialize the login form with email and password fields
         this.loginForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
 
+        // Get the return URL from the route parameters or default to '/tickets'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tickets';
     }
 
+    // Getter for easy access to form fields
     get f() { return this.loginForm.controls; }
 
+    /**
+     * Handles the form submission for login.
+     */
     onSubmit(): void {
+        // Stop if the form is invalid
         if (this.loginForm.invalid) {
             return;
         }
@@ -50,25 +58,22 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this.error = '';
 
-        console.log('Iniciando login...');
-
+        // Perform the login action
         this.authService.login(this.loginForm.value)
             .pipe(finalize(() => {
                 this.loading = false;
-                console.log('Finalizado proceso de login (éxito o error)'); // Agregado
             }))
             .subscribe({
                 next: (user) => {
-                    console.log('Login exitoso, redirigiendo a:', this.returnUrl); // Agregado
+                    // Redirect to the return URL on successful login
                     setTimeout(() => {
                         this.router.navigate([this.returnUrl]);
                     }, 100);
                 },
                 error: (error) => {
-                    console.error('Error en login:', error);
-                    this.error = error.error?.message || 'Credenciales incorrectas'; // Agregado
+                    // Display an error message on login failure
+                    this.error = error.error?.message || 'Invalid credentials';
                 }
             });
     }
-
 }

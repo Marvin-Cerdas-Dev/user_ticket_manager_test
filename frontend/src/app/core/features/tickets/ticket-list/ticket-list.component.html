@@ -1,20 +1,24 @@
 <div class="container">
   <h2>Tickets</h2>
 
+  <!-- Button to navigate to the create ticket page -->
   <div class="mb-3">
     <a [routerLink]="['/tickets/create']" class="btn btn-primary"
       >Create New Ticket</a
     >
   </div>
 
+  <!-- Display loading message while tickets are being fetched -->
   <div *ngIf="isLoading" class="text-center">
     <p>Loading tickets...</p>
   </div>
 
+  <!-- Display error message if there is an error -->
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
+  <!-- Display tickets table if available and no loading or error -->
   <div *ngIf="!isLoading && !error">
     <table class="table table-striped">
       <thead>
@@ -30,6 +34,7 @@
           <td>{{ ticket.title }}</td>
           <td>
             <h5>
+              <!-- Display ticket status with appropriate badge color -->
               <span
                 [ngClass]="{
                   'bg-warning': ticket.status === 'open',
@@ -42,19 +47,21 @@
               >
             </h5>
           </td>
-
           <td>{{ ticket.createdAt | date : "short" }}</td>
           <td>
+            <!-- Button to navigate to the ticket detail page -->
             <a
               [routerLink]="['/tickets', ticket.id]"
               class="btn btn-sm btn-info me-2"
               >View</a
             >
+            <!-- Button to navigate to the edit ticket page -->
             <a
               [routerLink]="['/tickets', ticket.id, 'edit']"
               class="btn btn-sm btn-primary me-2"
               >Edit</a
             >
+            <!-- Button to delete the ticket, visible only to admins -->
             <button
               *ngIf="isAdmin"
               (click)="deleteTicket(ticket.id)"
@@ -67,6 +74,7 @@
       </tbody>
     </table>
 
+    <!-- Display message if no tickets are found -->
     <div *ngIf="tickets.length === 0" class="alert alert-info">
       No tickets found.
     </div>

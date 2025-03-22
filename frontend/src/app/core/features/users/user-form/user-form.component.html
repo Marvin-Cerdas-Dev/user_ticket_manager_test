@@ -1,15 +1,18 @@
-<!-- src/app/admin/users/user-form/user-form.component.html -->
 <div class="container">
+  <!-- Display the header based on the mode (edit or create) -->
   <h2>{{ isEditing ? "Edit" : "Create" }} User</h2>
 
+  <!-- Display loading message while user data is being fetched -->
   <div *ngIf="isLoading" class="text-center">
     <p>Loading...</p>
   </div>
 
+  <!-- Display error message if there is an error -->
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
+  <!-- User form for creating or editing a user -->
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
     <div class="mb-3">
       <label for="fullName" class="form-label">Full Name</label>
@@ -112,6 +115,7 @@
     </div>
 
     <div class="mb-3">
+      <!-- Submit button for saving the user -->
       <button
         type="submit"
         class="btn btn-primary me-2"
@@ -119,6 +123,7 @@
       >
         {{ isEditing ? "Update" : "Create" }}
       </button>
+      <!-- Button to navigate back to the user list -->
       <a routerLink="/admin/users" class="btn btn-secondary">Cancel</a>
     </div>
   </form>

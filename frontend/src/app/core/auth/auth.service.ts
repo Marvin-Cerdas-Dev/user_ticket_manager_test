@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, tap, map } from 'rxjs';
 import { User, LoginResponse, LoginRequest } from '../shared/models/user.model';
 import { Router } from '@angular/router';
 
@@ -12,12 +12,17 @@ export class AuthService {
     private currentUserSubject = new BehaviorSubject<User | null>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
     private tokenKey = 'auth_token';
-    private userKey = 'current_user'; // Nueva clave para almacenar el usuario
+    private userKey = 'current_user';
 
     constructor(private http: HttpClient, private router: Router) {
         this.loadUserFromStorage();
     }
 
+    /**
+     * Logs in the user with the provided credentials.
+     * @param credentials The login credentials.
+     * @returns An observable of the login response.
+     */
     login(credentials: LoginRequest): Observable<LoginResponse> {
         return this.http.post<LoginResponse>(`${this.apiUri}/login`, credentials)
             .pipe(
@@ -27,6 +32,9 @@ export class AuthService {
             );
     }
 
+    /**
+     * Logs out the current user.
+     */
     logout(): void {
         const token = this.getToken();
         if (!token) {
@@ -43,10 +51,19 @@ export class AuthService {
         });
     }
 
+    /**
+     * Registers a new user.
+     * @param user The user details.
+     * @returns An observable of the registration response.
+     */
     register(user: { fullName: string; email: string; password: string, role: string }): Observable<any> {
         return this.http.post(`${this.apiUri}/register`, user);
     }
 
+    /**
+     * Checks if the user is logged in.
+     * @returns A boolean indicating if the user is logged in.
+     */
     isLoggedIn(): boolean {
         const token = this.getToken();
         const user = this.getCurrentUserFromStorage();
@@ -62,23 +79,36 @@ export class AuthService {
         }
     }
 
+    /**
+     * Gets the JWT token from local storage.
+     * @returns The JWT token or null if not found.
+     */
     getToken(): string | null {
         return localStorage.getItem(this.tokenKey);
     }
 
-    // Método para obtener el estado de administrador como Observable
+    /**
+     * Checks if the current user is an admin.
+     * @returns An observable of a boolean indicating if the user is an admin.
+     */
     isAdmin$(): Observable<boolean> {
         return this.currentUser$.pipe(
             map(user => !!user && user.role === 'admin')
         );
     }
 
-    // Método sincrónico para verificar si es administrador
+    /**
+     * Checks if the current user is an admin.
+     * @returns A boolean indicating if the user is an admin.
+     */
     isAdmin(): boolean {
         const user = this.currentUserSubject.value || this.getCurrentUserFromStorage();
         return !!user && user.role === 'admin';
     }
 
+    /**
+     * Clears the current session.
+     */
     private clearSession(): void {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userKey);
@@ -86,13 +116,20 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
+    /**
+     * Sets the authentication data in local storage and updates the current user subject.
+     * @param response The login response containing the token and user information.
+     */
     private setAuthData(response: LoginResponse): void {
         localStorage.setItem(this.tokenKey, response.token);
         localStorage.setItem(this.userKey, JSON.stringify(response.user));
         this.currentUserSubject.next(response.user);
     }
 
-    // Obtener usuario directamente del localStorage
+    /**
+     * Gets the current user from local storage.
+     * @returns The current user or null if not found.
+     */
     private getCurrentUserFromStorage(): User | null {
         const userJson = localStorage.getItem(this.userKey);
         if (userJson) {
@@ -105,37 +142,41 @@ export class AuthService {
         return null;
     }
 
+    /**
+     * Loads the user from local storage or fetches it from the server if not found.
+     */
     private loadUserFromStorage(): void {
-        // Primero intentamos cargar el usuario desde localStorage
+        // First, try to load the user from local storage
         const user = this.getCurrentUserFromStorage();
         if (user) {
             this.currentUserSubject.next(user);
             return;
         }
 
-        // Si no hay usuario en localStorage, intentamos obtenerlo del token
+        // If no user in local storage, try to get it from the token
         const token = this.getToken();
         if (token) {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
-                // Verificar si podemos obtener el usuario del payload
+                // Check if we can get the user from the payload
                 if (payload.user) {
                     const user = payload.user;
-                    // Guardar el usuario en localStorage para futuras cargas
+                    // Save the user in local storage for future loads
                     localStorage.setItem(this.userKey, JSON.stringify(user));
                     this.currentUserSubject.next(user);
                 } else {
-                    // Si no hay información de usuario en el token, hacemos una petición
+                    // If no user info in the token, make a request
                     this.fetchCurrentUser();
                 }
             } catch (error) {
-                console.error('Error decoding token', error);
                 this.logout();
             }
         }
     }
 
-    // Método para obtener el usuario actual desde el servidor
+    /**
+     * Fetches the current user from the server.
+     */
     private fetchCurrentUser(): void {
         const token = this.getToken();
         if (!token) {

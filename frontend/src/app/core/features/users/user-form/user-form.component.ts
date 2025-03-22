@@ -1,4 +1,3 @@
-// src/app/admin/users/user-form/user-form.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -32,7 +31,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        // Verificar si el usuario es administrador
+        // Check if the user is an admin
         this.isAdmin = this.authService.isAdmin();
 
         this.subscription.add(
@@ -44,10 +43,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
             })
         );
 
-        // Inicializar el formulario
+        // Initialize the form
         this.initForm();
 
-        // Obtener el ID del usuario de la URL si existe
+        // Get the user ID from the URL if it exists
         this.subscription.add(
             this.route.paramMap.subscribe(params => {
                 this.userId = params.get('id');
@@ -61,9 +60,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions to prevent memory leaks
         this.subscription.unsubscribe();
     }
 
+    /**
+     * Initializes the user form with validation rules.
+     */
     initForm(): void {
         this.userForm = this.fb.group({
             fullName: ['', [Validators.required]],
@@ -73,6 +76,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Loads the user data by ID and populates the form.
+     * @param id The ID of the user to load.
+     */
     loadUserData(id: string): void {
         this.isLoading = true;
         this.subscription.add(
@@ -81,7 +88,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
                     this.userForm.patchValue({
                         fullName: user.fullName,
                         email: user.email,
-                        // No establecemos el password ya que es un campo sensible
+                        // Do not set the password as it is a sensitive field
                         role: user.role
                     });
                     this.isLoading = false;
@@ -89,12 +96,14 @@ export class UserFormComponent implements OnInit, OnDestroy {
                 error: (err) => {
                     this.error = 'Error loading user data. Please try again.';
                     this.isLoading = false;
-                    console.error('Error loading user data', err);
                 }
             })
         );
     }
 
+    /**
+     * Handles the form submission for creating or updating a user.
+     */
     onSubmit(): void {
         if (this.userForm.invalid) {
             return;
@@ -112,7 +121,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
                     error: (err) => {
                         this.error = 'Error updating user. Please try again.';
                         this.isLoading = false;
-                        console.error('Error updating user', err);
                     }
                 })
             );
@@ -125,7 +133,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
                     error: (err) => {
                         this.error = 'Error creating user. Please try again.';
                         this.isLoading = false;
-                        console.error('Error creating user', err);
                     }
                 })
             );

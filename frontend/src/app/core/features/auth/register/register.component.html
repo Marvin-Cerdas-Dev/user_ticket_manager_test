@@ -4,12 +4,15 @@
       <h4 class="card-title">Register</h4>
     </div>
     <div class="card-body">
+      <!-- Display success message if registration is successful -->
       <div *ngIf="success" class="alert alert-success">
         Registration successful! Redirecting to login...
       </div>
+      <!-- Display error message if there is an error -->
       <div *ngIf="error" class="alert alert-danger">
         {{ error }}
       </div>
+      <!-- Registration form -->
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
           <label for="fullName" class="form-label">Full Name</label>

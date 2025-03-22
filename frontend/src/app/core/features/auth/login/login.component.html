@@ -5,10 +5,12 @@
         <div class="card-body">
           <h2 class="text-center mb-4">Login</h2>
 
+          <!-- Display error message if there is an error -->
           <div *ngIf="error" class="alert alert-danger">
             {{ error }}
           </div>
 
+          <!-- Login form -->
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
@@ -20,7 +22,7 @@
                 [ngClass]="{
                   'is-invalid': f['email'].invalid && f['email'].touched
                 }"
-                placeholder="usuario@ejemplo.com"
+                placeholder="user@example.com"
               />
               <div
                 *ngIf="f['email'].invalid && f['email'].touched"
@@ -45,7 +47,7 @@
                 [ngClass]="{
                   'is-invalid': f['password'].invalid && f['password'].touched
                 }"
-                placeholder="Contraseña"
+                placeholder="Password"
               />
               <div
                 *ngIf="f['password'].invalid && f['password'].touched"
@@ -56,10 +58,13 @@
                 </div>
               </div>
             </div>
+
+            <!-- Link to the registration page -->
             <div class="mb-3">
               Create an account? <a routerLink="/register">Register</a>
             </div>
 
+            <!-- Submit button -->
             <button
               type="submit"
               class="btn btn-primary w-100 mt-3"

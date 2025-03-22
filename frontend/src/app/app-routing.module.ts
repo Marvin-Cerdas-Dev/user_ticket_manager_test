@@ -38,10 +38,9 @@ export const routes: Routes = [
                     }
                 ]
             },
-            // Rutas para la gestión de usuarios
             {
                 path: 'users',
-                canActivate: [AdminGuard], // Solo administradores pueden acceder
+                canActivate: [AdminGuard],
                 children: [
                     {
                         path: '',
@@ -70,3 +69,22 @@ export const routes: Routes = [
     exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+/**
+ * AppRoutingModule: This module defines the routes for the application.
+ * - routes: An array of route definitions.
+ *   - 'login': Route for the login component.
+ *   - 'register': Lazy-loaded route for the register component.
+ *   - '': Route for the main layout component, protected by AuthGuard.
+ *     - 'tickets': Child routes for ticket management.
+ *       - '': Route for the ticket list component.
+ *       - 'create': Route for the ticket creation component.
+ *       - ':id/edit': Route for the ticket edit component.
+ *       - ':id': Route for the ticket detail component.
+ *     - 'users': Child routes for user management, protected by AdminGuard.
+ *       - '': Route for the user list component.
+ *       - ':id/edit': Route for the user edit component.
+ *       - ':id': Route for the user detail component.
+ *   - '': Redirects to 'login' if no path is specified.
+ *   - '**': Redirects to 'login' for any unknown paths.
+ */

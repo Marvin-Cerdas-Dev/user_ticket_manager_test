@@ -1,12 +1,15 @@
 <div class="container">
   <h1>User Management</h1>
 
+  <!-- Display loading message while users are being fetched -->
   <div *ngIf="isLoading" class="alert alert-info">Loading users...</div>
 
+  <!-- Display error message if there is an error -->
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
+  <!-- Display users table if available and no loading or error -->
   <div
     *ngIf="!isLoading && !error && users.length > 0"
     class="table-responsive"
@@ -27,6 +30,7 @@
           <td>{{ user.email }}</td>
           <td>
             <h5>
+              <!-- Display user role with appropriate badge color -->
               <span
                 [ngClass]="{
                   'bg-primary': user.role === 'admin',
@@ -40,16 +44,19 @@
           </td>
           <td>{{ user.createdAt | date : "short" }}</td>
           <td>
+            <!-- Button to navigate to the user detail page -->
             <a
               [routerLink]="['/users', user._id]"
               class="btn btn-info btn-sm me-1"
               >View</a
             >
+            <!-- Button to navigate to the edit user page -->
             <a
               [routerLink]="['/users', user._id, 'edit']"
               class="btn btn-primary btn-sm me-1"
               >Edit</a
             >
+            <!-- Button to delete the user -->
             <button
               type="button"
               class="btn btn-danger btn-sm"
@@ -63,6 +70,7 @@
     </table>
   </div>
 
+  <!-- Display message if no users are found -->
   <div
     *ngIf="!isLoading && !error && users.length === 0"
     class="alert alert-warning"

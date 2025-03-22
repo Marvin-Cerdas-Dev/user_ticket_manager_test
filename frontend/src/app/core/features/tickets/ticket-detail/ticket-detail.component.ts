@@ -35,6 +35,10 @@ export class TicketDetailComponent implements OnInit {
         }
     }
 
+    /**
+     * Loads the ticket details by ID.
+     * @param id The ID of the ticket to load.
+     */
     loadTicket(id: string): void {
         this.ticketService.getTicketById(id).subscribe({
             next: (data) => {
@@ -44,11 +48,13 @@ export class TicketDetailComponent implements OnInit {
             error: (err) => {
                 this.error = 'Error loading ticket. Please try again.';
                 this.isLoading = false;
-                console.error('Error loading ticket', err);
             }
         });
     }
 
+    /**
+     * Deletes the current ticket.
+     */
     deleteTicket(): void {
         if (!this.ticket) return;
 
@@ -59,7 +65,6 @@ export class TicketDetailComponent implements OnInit {
                 },
                 error: (err) => {
                     this.error = 'Error deleting ticket. Please try again.';
-                    console.error('Error deleting ticket', err);
                 }
             });
         }

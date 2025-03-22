@@ -25,29 +25,32 @@ export class UserListComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        // Verificar si el usuario es administrador
+        // Check if the user is an admin
         this.isAdmin = this.authService.isAdmin();
 
-        // Suscribirse a cambios en el estado de administrador
+        // Subscribe to changes in the admin status
         this.subscription.add(
             this.authService.isAdmin$().subscribe(isAdmin => {
                 this.isAdmin = isAdmin;
-                // Si el usuario no es administrador, redirigir
+                // If the user is not an admin, redirect
                 if (!isAdmin) {
-                    // Podrías redirigir a otra página aquí
-                    console.error('Acceso no autorizado. Se requiere rol de administrador.');
+                    // You could redirect to another page here
                 }
             })
         );
 
-        // Cargar la lista de usuarios
+        // Load the list of users
         this.loadUsers();
     }
 
     ngOnDestroy(): void {
+        // Unsubscribe from all subscriptions to prevent memory leaks
         this.subscription.unsubscribe();
     }
 
+    /**
+     * Loads the list of users from the server.
+     */
     loadUsers(): void {
         this.isLoading = true;
         this.subscription.add(
@@ -59,12 +62,15 @@ export class UserListComponent implements OnInit, OnDestroy {
                 error: (err) => {
                     this.error = 'Error loading users. Please try again.';
                     this.isLoading = false;
-                    console.error('Error loading users', err);
                 }
             })
         );
     }
 
+    /**
+     * Deletes a user by their ID.
+     * @param id The ID of the user to delete.
+     */
     deleteUser(id: string): void {
         if (confirm('Are you sure you want to delete this user?')) {
             this.subscription.add(
@@ -74,7 +80,6 @@ export class UserListComponent implements OnInit, OnDestroy {
                     },
                     error: (err) => {
                         this.error = 'Error deleting user. Please try again.';
-                        console.error('Error deleting user', err);
                     }
                 })
             );
