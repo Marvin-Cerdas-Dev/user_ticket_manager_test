@@ -67,16 +67,6 @@
     </div>
 
     <div class="row">
-      <div class="col-md-4 mb-3">
-        <label for="priority" class="form-label">Priority</label>
-        <select id="priority" formControlName="priority" class="form-select">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-          <option value="critical">Critical</option>
-        </select>
-      </div>
-
       <div class="col-md-4 mb-3" *ngIf="isEditMode">
         <label for="status" class="form-label">Status</label>
         <select id="status" formControlName="status" class="form-select">

@@ -12,6 +12,7 @@ export interface TicketCreateRequest {
     title: string;
     description: string;
     status: 'open' | 'in-progress' | 'resolved';
+    assignedTo?: string;
 }
 
 export interface TicketUpdateRequest {

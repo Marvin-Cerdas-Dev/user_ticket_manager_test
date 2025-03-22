@@ -31,6 +31,7 @@ export class TicketListComponent implements OnInit {
         this.isLoading = true;
         this.ticketService.getTickets().subscribe({
             next: (data) => {
+                console.log('Tickets received:', data); // Agregado
                 this.tickets = data;
                 this.isLoading = false;
             },

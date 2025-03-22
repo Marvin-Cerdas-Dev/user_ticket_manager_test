@@ -34,13 +34,10 @@
 
         <div class="row">
           <div class="col-md-6">
-            <p><strong>Assigned To:</strong> {{ ticket.assignedTo }}</p>
             <p>
               <strong>Created At:</strong>
               {{ ticket.createdAt | date : "medium" }}
             </p>
-          </div>
-          <div class="col-md-6">
             <p>
               <strong>Assigned To:</strong>
               {{ ticket.assignedTo || "Unassigned" }}
@@ -58,7 +55,7 @@
         >
         <a
           [routerLink]="['/tickets', ticket.id, 'edit']"
-          class="btn btn-Prioritymary me-2"
+          class="btn btn-primary me-2"
           >Edit</a
         >
         <button *ngIf="isAdmin" (click)="deleteTicket()" class="btn btn-danger">

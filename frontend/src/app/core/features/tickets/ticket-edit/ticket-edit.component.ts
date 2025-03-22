@@ -42,7 +42,6 @@ export class TicketEditComponent implements OnInit {
             title: ['', [Validators.required, Validators.minLength(5)]],
             description: ['', [Validators.required, Validators.minLength(10)]],
             status: [{ value: 'open', disabled: !this.isEditMode }],
-            priority: ['medium', Validators.required],
             assignedTo: ['']
         });
     }
@@ -76,6 +75,8 @@ export class TicketEditComponent implements OnInit {
         this.isSaving = true;
 
         if (this.isEditMode && this.ticketId) {
+
+
             const updateData: TicketUpdateRequest = {
                 title: this.ticketForm.value.title,
                 description: this.ticketForm.value.description,
@@ -94,11 +95,17 @@ export class TicketEditComponent implements OnInit {
                 }
             });
         } else {
+            console.log('SALVANDO EL TICKET...');
+
             const createData: TicketCreateRequest = {
                 title: this.ticketForm.value.title,
                 description: this.ticketForm.value.description,
-                status: 'open'
+                status: 'open',
+                //assignedTo: this.ticketForm.value.assignedTo || undefined
+                assignedTo: "67da92fddaab2dcd91e860a9"
             };
+
+            console.log('TICKET =>', createData);
 
             this.ticketService.createTicket(createData).subscribe({
                 next: (newTicket) => {
